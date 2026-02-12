@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💖 فلانتين</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: white;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #ff1744;
+            margin-bottom: 40px;
+            animation: fadeIn 1s ease-in;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 15px 40px;
+            font-size: 1.5em;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            background: #ff1744;
+            color: white;
+            width: 150px;
+        }
+
+        .yes-btn:hover {
+            background: #d50000;
+            transform: scale(1.1);
+        }
+
+        .no-btn {
+            position: relative;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .success-message {
+            font-size: 3em;
+            color: #ff1744;
+            animation: heartBeat 1s infinite;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes heartBeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        .hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 30px;
+            animation: fall 3s linear;
+            opacity: 0;
+        }
+
+        @keyframes fall {
+            0% {
+                top: -50px;
+                opacity: 1;
+            }
+            100% {
+                top: 100vh;
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hearts" id="hearts"></div>
+
+    <div class="container">
+        <h1 id="question">ايه رأيك تحتفل بفلانتين معايا؟ 💕</h1>
+
+        <div class="buttons" id="initialButtons">
+            <button class="yes-btn" onclick="handleYes()">Yes</button>
+            <button class="no-btn" id="noBtn">No</button>
+        </div>
+
+        <div class="success-message hidden" id="successMsg">
+            💕 يااااي! سعيد جداً 💕
+        </div>
+    </div>
+
+    <script>
+        function handleYes() {
+            document.getElementById('question').classList.add('hidden');
+            document.getElementById('initialButtons').classList.add('hidden');
+            document.getElementById('successMsg').classList.remove('hidden');
+            createHearts();
+        }
+
+        function moveNoButton() {
+            const btn = document.getElementById('noBtn');
+            const btnRect = btn.getBoundingClientRect();
+
+            const maxX = window.innerWidth - btnRect.width - 20;
+            const maxY = window.innerHeight - btnRect.height - 20;
+
+            let randomX = Math.random() * maxX;
+            let randomY = Math.random() * maxY;
+
+            // التأكد من أن الزر لا يذهب لمكان قريب جداً من مكانه الحالي
+            while (Math.abs(randomX - btnRect.left) < 100 && Math.abs(randomY - btnRect.top) < 100) {
+                randomX = Math.random() * maxX;
+                randomY = Math.random() * maxY;
+            }
+
+            btn.style.position = 'fixed';
+            btn.style.left = randomX + 'px';
+            btn.style.top = randomY + 'px';
+        }
+
+        // تحريك زر No عند بداية الضغط عليه
+        const noBtn = document.getElementById('noBtn');
+        noBtn.addEventListener('mousedown', function(e) {
+            e.preventDefault();
+            moveNoButton();
+        });
+
+        function createHearts() {
+            const heartsContainer = document.getElementById('hearts');
+
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart';
+                    heart.innerHTML = '❤️';
+                    heart.style.left = Math.random() * 100 + '%';
+                    heart.style.animationDelay = Math.random() + 's';
+                    heartsContainer.appendChild(heart);
+
+                    setTimeout(() => heart.remove(), 3000);
+                }, i * 100);
+            }
+        }
+    </script>
+</body>
+</html>
